@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大阪旅行の予定表</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            color: #1f2937;
+        }
+        .container {
+            max-width: 900px;
+        }
+        .tab-button.active {
+            background-color: #1f2937;
+            color: #ffffff;
+            font-weight: 600;
+        }
+        .card {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+        }
+        .message-box {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 99;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-6 md:p-10">
+
+    <div class="container mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl sm:text-4xl font-bold mb-2">大阪旅行の予定表</h1>
+            <p class="text-base sm:text-lg text-gray-600">最新の情報に更新し、スマホでも見やすくしました</p>
+        </header>
+
+        <main>
+            <!-- タブボタン -->
+            <div class="flex flex-wrap justify-center space-x-2 sm:space-x-4 mb-6">
+                <button class="tab-button active px-4 py-2 rounded-lg font-semibold transition-colors duration-200" data-tab="plan-1">9/13(土)</button>
+                <button class="tab-button px-4 py-2 rounded-lg font-semibold transition-colors duration-200" data-tab="plan-2">9/14(日)</button>
+                <button class="tab-button px-4 py-2 rounded-lg font-semibold transition-colors duration-200" data-tab="plan-3">9/15(月)</button>
+                <button class="tab-button px-4 py-2 rounded-lg font-semibold transition-colors duration-200" data-tab="plan-4">9/16(火)</button>
+                <button class="tab-button px-4 py-2 rounded-lg font-semibold transition-colors duration-200" data-tab="plan-5">料金表</button>
+                <button class="tab-button px-4 py-2 rounded-lg font-semibold transition-colors duration-200" data-tab="plan-6">場所候補</button>
+            </div>
+
+            <!-- タブコンテンツ -->
+            <div id="plan-1" class="tab-content bg-white p-4 sm:p-6 rounded-2xl shadow-lg">
+                <h2 class="text-xl sm:text-2xl font-bold mb-4">9月13日(土)</h2>
+                <div class="space-y-4">
+                </div>
+            </div>
+
+            <div id="plan-2" class="tab-content hidden bg-white p-4 sm:p-6 rounded-2xl shadow-lg">
+                <h2 class="text-xl sm:text-2xl font-bold mb-4">9月14日(日)</h2>
+                <div class="space-y-4">
+                </div>
+            </div>
+
+            <div id="plan-3" class="tab-content hidden bg-white p-4 sm:p-6 rounded-2xl shadow-lg">
+                <h2 class="text-xl sm:text-2xl font-bold mb-4">9月15日(月)</h2>
+                <div class="space-y-4">
+                </div>
+            </div>
+
+            <div id="plan-4" class="tab-content hidden bg-white p-4 sm:p-6 rounded-2xl shadow-lg">
+                <h2 class="text-xl sm:text-2xl font-bold mb-4">9月16日(火)</h2>
+                <div class="space-y-4">
+                </div>
+            </div>
+            
+            <div id="plan-5" class="tab-content hidden bg-white p-4 sm:p-6 rounded-2xl shadow-lg">
+                <h2 class="text-xl sm:text-2xl font-bold mb-6">料金表</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mb-6" id="cost-cards">
+                    <!-- JavaScriptでカードを動的に生成します -->
+                </div>
+                <div class="flex flex-col sm:flex-row justify-between items-center bg-gray-100 p-4 sm:p-6 rounded-2xl text-base sm:text-xl">
+                    <div class="flex items-center font-bold mb-4 sm:mb-0">
+                        <span>合計金額:</span>
+                        <span id="total-cost" class="ml-2 text-2xl sm:text-3xl text-emerald-600">0</span>
+                        <span class="ml-1">円</span>
+                    </div>
+                    <div class="flex items-center font-bold">
+                        <span>予算:</span>
+                        <span id="budget" class="ml-2 text-2xl sm:text-3xl text-indigo-600">0</span>
+                        <span class="ml-1">円</span>
+                    </div>
+                </div>
+            </div>
+
+            <div id="plan-6" class="tab-content hidden bg-white p-4 sm:p-6 rounded-2xl shadow-lg">
+                <h2 class="text-xl sm:text-2xl font-bold mb-4">大阪で行く場所候補</h2>
+                <ul class="list-disc list-inside space-y-2 text-base sm:text-lg">
+                    <li class="bg-gray-100 p-3 rounded-xl">道頓堀</li>
+                    <li class="bg-gray-100 p-3 rounded-xl">大阪城</li>
+                    <li class="bg-gray-100 p-3 rounded-xl">アメリカ村</li>
+                </ul>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabs = document.querySelectorAll('.tab-button');
+            const contents = document.querySelectorAll('.tab-content');
+            const costCardsContainer = document.getElementById('cost-cards');
+            const totalCostElement = document.getElementById('total-cost');
+            const budgetElement = document.getElementById('budget');
+
+            const scheduleData = {
+                'plan-1': [
+                    { time: '22:00', event: '各々の家に到着' },
+                    { time: '23:30', event: '松山一番街 夜行バス発' }
+                ],
+                'plan-2': [
+                    { time: '6:30', event: '梅田バスターミナル 夜行バス着' },
+                    { time: '7:00', event: 'しんぱち食堂 阪急梅田店で朝ごはん' },
+                    { time: '8:00', event: '優雅なmorning食べ終わり' },
+                    { time: '9:00', event: '大阪城観光' },
+                    { time: '11:00', event: '道頓堀観光' },
+                    { time: '12:00', event: '道頓堀で昼ごはん' },
+                    { time: '15:00', event: 'サクラサンズホテル チェックイン' },
+                    { time: '15:55', event: 'コンサート会場に向かう' },
+                    { time: '17:00', event: 'コンサート開始' },
+                    { time: '19:30', event: 'コンサート終了' },
+                    { time: '20:00', event: '〇〇で夜ごはん(※その時の気分)' },
+                    { time: '21:00～', event: '自由時間' }
+                ],
+                'plan-3': [
+                    { time: '9:00', event: 'コンビニのおにぎりとかを食べる' },
+                    { time: '10:00', event: 'ホテルチェックアウト' },
+                    { time: '10:30', event: '大阪から京都へ新快速で向かう' },
+                    { time: '12:00', event: '京都でお昼ごはん' },
+                    { time: '', event: '---' },
+                    { time: '', event: '【京都観光】' },
+                    { time: '', event: '1. 伏見稲荷大社 (所要時間: 1時間30分〜2時間)' },
+                    { time: '12:00', event: '京都でお昼ごはん(未定)' },
+                    { time: '', event: '2. 清水寺・金剛寺 (八坂庚申堂) (所要時間: 2時間〜2時間30分)' },
+                    { time: '', event: '3. 銀閣寺 (所要時間: 1時間〜1時間30分)' },
+                    { time: '', event: '4. 嵐山 (所要時間: 2時間〜3時間)' },
+                    { time: '20:00', event: '京都で夜ごはん(未定)' },
+                    { time: '', event: '---' },
+                    { time: '21:30', event: 'JR京都駅を出る' },
+                    { time: '22:00', event: 'バスターミナルに向かう' },
+                    { time: '22:45', event: '梅田バスターミナル 夜行バス発' }
+                ],
+                'plan-4': [
+                    { time: '5:30', event: '松山一番街 夜行バス着' }
+                ]
+            };
+
+            const costData = [
+                { category: "交通費", item: "大阪→京都", cost: 580 },
+                { category: "交通費", item: "京都→大阪", cost: 580 },
+                { category: "交通費", item: "大阪内での移動費", cost: 2000 },
+                { category: "交通費", item: "京都内での移動費", cost: 2000 },
+                { category: "飲食費", item: "1日目朝ご飯", cost: 1000 },
+                { category: "飲食費", item: "1日目昼ご飯", cost: 1000 },
+                { category: "飲食費", item: "1日目夜ご飯", cost: 1000 },
+                { category: "飲食費", item: "2日目朝ご飯", cost: 1000 },
+                { category: "飲食費", item: "2日目昼ご飯", cost: 1000 },
+                { category: "飲食費", item: "2日目夜ご飯", cost: 1000 },
+                { category: "宿泊費", item: "ホテル代", cost: 7207 },
+                { category: "交通費", item: "夜行バス代(往復)", cost: 13000 },
+                { category: "入場料", item: "チケット代", cost: 9000 },
+            ];
+
+            const totalCost = 40367;
+            const budget = 40000;
+
+            // 予定表のコンテンツを生成
+            function renderSchedule() {
+                for (const tabId in scheduleData) {
+                    const contentContainer = document.getElementById(tabId).querySelector('.space-y-4');
+                    if (contentContainer) {
+                        contentContainer.innerHTML = '';
+                        scheduleData[tabId].forEach(item => {
+                            const eventDiv = document.createElement('div');
+                            eventDiv.className = 'bg-gray-100 p-4 rounded-xl flex items-start';
+                            eventDiv.innerHTML = `
+                                <span class="text-gray-500 font-medium mr-4 min-w-[70px]">${item.time}</span>
+                                <p>${item.event}</p>
+                            `;
+                            contentContainer.appendChild(eventDiv);
+                        });
+                    }
+                }
+            }
+
+            // 料金表カードを生成
+            function renderCostCards() {
+                costCardsContainer.innerHTML = '';
+                costData.forEach(data => {
+                    const card = `
+                        <div class="card bg-white p-6 rounded-2xl border-l-4 border-l-emerald-500">
+                            <h3 class="font-bold text-gray-400 text-sm mb-1">${data.category}</h3>
+                            <p class="text-xl font-semibold mb-2">${data.item}</p>
+                            <p class="text-2xl text-emerald-600 font-bold">${data.cost.toLocaleString()} 円</p>
+                        </div>
+                    `;
+                    costCardsContainer.innerHTML += card;
+                });
+                totalCostElement.textContent = totalCost.toLocaleString();
+                budgetElement.textContent = budget.toLocaleString();
+            }
+
+            // タブ切り替え機能
+            function switchTab(tabId) {
+                contents.forEach(content => {
+                    content.classList.add('hidden');
+                });
+                tabs.forEach(tab => {
+                    tab.classList.remove('active', 'bg-gray-900', 'text-white');
+                    tab.classList.add('bg-gray-200', 'text-gray-800');
+                });
+                document.getElementById(tabId).classList.remove('hidden');
+                document.querySelector(`[data-tab="${tabId}"]`).classList.add('active', 'bg-gray-900', 'text-white');
+            }
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.getAttribute('data-tab');
+                    switchTab(tabId);
+                });
+            });
+
+            // 初期表示
+            renderSchedule();
+            renderCostCards();
+            switchTab('plan-1');
+        });
+    </script>
+</body>
+</html>
